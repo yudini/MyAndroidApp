@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.calendar_gridview);
 
         // 데이터 원본 준비
-        String[] items = {"item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8"};
+        String[] items = {"1", "2", "3", "4", "5", "6", "7", "8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
 
         //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
         ArrayAdapter<String> adapt
