@@ -14,6 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.TextView;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +24,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_gridview);
+
+        // id를 바탕으로 화면 레이아웃에 정의된 GridView 객체 로딩
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+        TextView todayDate = (TextView) findViewById(R.id.date);
+        Calendar today = Calendar.getInstance();
+        int year = today.get(Calendar.YEAR);
+        int month = today.get(Calendar.MONTH);
+        todayDate.setText(year + "년" + month+1 + "월");
+
+
 
         // 데이터 원본 준비
         String[] items = {"1", "2", "3", "4", "5", "6", "7", "8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
@@ -32,10 +45,12 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1,
                 items);
 
-        // id를 바탕으로 화면 레이아웃에 정의된 GridView 객체 로딩
-        GridView gridview = (GridView) findViewById(R.id.gridview);
         // 어댑터를 GridView 객체에 연결
         gridview.setAdapter(adapt);
+
+
     }
+
+
 
 }
