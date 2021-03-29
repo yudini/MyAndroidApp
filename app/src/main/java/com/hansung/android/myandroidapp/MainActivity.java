@@ -26,46 +26,32 @@ public class MainActivity extends AppCompatActivity {
 
     Calendar today;
     // 데이터 원본 준비
-    int year,month,date;
+    ArrayList<String> list = new ArrayList<>();
+    Intent getIn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_gridview);
         TextView todayDate=(TextView)findViewById(R.id.date); // id를 바탕으로 화면 레이아웃에 정의된 TextView 객체 로딩
 
-        ArrayList<String> list = new ArrayList<>();
-
         Button pre = findViewById(R.id.button);
         Button next = findViewById(R.id.button2);
 
+        today = Calendar.getInstance();   //현재 날짜를 가진 캘린더 객체 생성
 
-        Intent getIn = getIntent();
+        getIn = getIntent();   //인텐트 입력받기
         //!TextUtils.isEmpty(getIn.getStringExtra("year"))
-        if (getIn.getIntExtra("year",0)==0){
-            init(list);
+        if (getIn.getIntExtra("year",0)==0){  // 인텐트 여부 확인
+            init();               //초기달력정보 받아오기
         }
 
-        else{
-            today=Calendar.getInstance();
-            year=getIn.getIntExtra("year",0);
-            month=getIn.getIntExtra("month",0);
-            date=getIn.getIntExtra("date",1);
-           // year=getIn.getExtras().getInt("year");
-            //month=getIn.getExtras().getInt("month");
-            //date=getIn.getExtras().getInt("date");
-            today.set(year,month,date);
-            Calendar thisMonth = Calendar.getInstance();
-            thisMonth.set(year,month,1);     //현재 달의 첫번째날로 날짜 설정
-            int lastDate = today.getActualMaximum(Calendar.DATE);  //이번달의 마지막 날 얻어서 저장
-            int startDate = thisMonth.get(Calendar.DAY_OF_WEEK);   //이번달의 시작요일 얻어서 저장
-            for(int i=0;i<startDate-1;i++){
-                list.add("");                //공백으로 채우기
-            }
-            for(int i=1;i<=lastDate;i++){
-                list.add(Integer.toString(i));     //일 채우기
-            }
+        else{    //인텐트가 있을 때, 즉 새로운 액티비티가 생성되었을 때
+            getCalendar();   //캘린더 정보 받아오기
         }
-        todayDate.setText(year + "년" + month + "월");    //텍스트뷰에 현재년도 및 월 띄우기
+
+        int month=today.get(Calendar.MONTH)+1;      //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정.
+        todayDate.setText(today.get(Calendar.YEAR) + "년" + month + "월");    //텍스트뷰에 현재 연도 및 월 띄우기
 
         // id를 바탕으로 화면 레이아웃에 정의된 GridView 객체 로딩
         GridView gridview = (GridView) findViewById(R.id.gridview);
@@ -74,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                intent.putExtra("year",year);
-                intent.putExtra("month",month-1);
-                intent.putExtra("date",date);
+                intent.putExtra("year",today.get(Calendar.YEAR));
+                intent.putExtra("month",today.get(Calendar.MONTH)-1);
+                intent.putExtra("date",1);
                 startActivity(intent);
             }
         });
@@ -85,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                intent.putExtra("year",today.get(Calendar.YEAR));
+                intent.putExtra("month",today.get(Calendar.MONTH)+1);
+                intent.putExtra("date",1);
                 startActivity(intent);
             }
         });
@@ -102,22 +91,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void init(ArrayList<String> list){
-        today = Calendar.getInstance();
-        Calendar thisMonth = Calendar.getInstance();
-        thisMonth.set(Calendar.DAY_OF_MONTH,1);     //현재 달의 첫번째날로 날짜 설정
-        year = today.get(Calendar.YEAR);         //현재년도 정보 얻어서 저장
-        month = today.get(Calendar.MONTH) +1;    //현재 월의 정보 얻어서 저장
-        date = today.get(Calendar.DATE);
+    //현재 날짜의 달력 정보를 가져오는 함수. 초기 액티비티 시작시
+    private void init(){
+        today.set(Calendar.DAY_OF_MONTH,1);     //현재 달의 첫번째날로 날짜 설정
         int lastDate = today.getActualMaximum(Calendar.DATE);  //이번달의 마지막 날 얻어서 저장
-        int startDate = thisMonth.get(Calendar.DAY_OF_WEEK);   //이번달의 시작요일 얻어서 저장
+        int startDate = today.get(Calendar.DAY_OF_WEEK);   //이번달의 시작요일 얻어서 저장
+        for(int i=0;i<startDate-1;i++){
+            list.add("");                //시작 요일 이전 요일 공백으로 채우기
+        }
+        for(int i=1;i<=lastDate;i++){
+            list.add(Integer.toString(i));     //일 채우기
+        }
+
+    }
+
+    //달력 정보를 가져오는 함수,인텐트로 새로운 달력 정보를 가져올 경우
+    private void getCalendar(){
+        int year=getIn.getIntExtra("year",0);
+        int month=getIn.getIntExtra("month",0);
+        today.set(year,month,1);
+        //Calendar thisMonth = Calendar.getInstance();
+        //thisMonth.set(year,month,1);     //현재 달의 첫번째날로 날짜 설정
+        int lastDate = today.getActualMaximum(Calendar.DATE);  //이번달의 마지막 날 얻어서 저장
+        int startDate = today.get(Calendar.DAY_OF_WEEK);   //이번달의 시작요일 얻어서 저장
         for(int i=0;i<startDate-1;i++){
             list.add("");                //공백으로 채우기
         }
         for(int i=1;i<=lastDate;i++){
             list.add(Integer.toString(i));     //일 채우기
         }
-
     }
 
 
