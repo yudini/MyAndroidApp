@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.TextUtils;
 import android.view.View;
 
 import android.view.Menu;
@@ -25,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
     Calendar today;
     // 데이터 원본 준비
-    ArrayList<String> list = new ArrayList<>();
     int year,month,date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,23 +33,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.calendar_gridview);
         TextView todayDate=(TextView)findViewById(R.id.date); // id를 바탕으로 화면 레이아웃에 정의된 TextView 객체 로딩
 
+        ArrayList<String> list = new ArrayList<>();
+
         Button pre = findViewById(R.id.button);
         Button next = findViewById(R.id.button2);
-        init();
-        todayDate.setText(year + "년"+month+"월");
+
 
         Intent getIn = getIntent();
-        if(getIn==null){
-            init();
-            todayDate.setText(year + "년" + month + "월");    //텍스트뷰에 현재년도 및 월 띄우기
+        //!TextUtils.isEmpty(getIn.getStringExtra("year"))
+        if (getIn.getIntExtra("year",0)==0){
+            init(list);
         }
 
         else{
+            today=Calendar.getInstance();
             year=getIn.getIntExtra("year",0);
             month=getIn.getIntExtra("month",0);
             date=getIn.getIntExtra("date",1);
+           // year=getIn.getExtras().getInt("year");
+            //month=getIn.getExtras().getInt("month");
+            //date=getIn.getExtras().getInt("date");
             today.set(year,month,date);
-
             Calendar thisMonth = Calendar.getInstance();
             thisMonth.set(year,month,1);     //현재 달의 첫번째날로 날짜 설정
             int lastDate = today.getActualMaximum(Calendar.DATE);  //이번달의 마지막 날 얻어서 저장
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 list.add(Integer.toString(i));     //일 채우기
             }
         }
+        todayDate.setText(year + "년" + month + "월");    //텍스트뷰에 현재년도 및 월 띄우기
 
         // id를 바탕으로 화면 레이아웃에 정의된 GridView 객체 로딩
         GridView gridview = (GridView) findViewById(R.id.gridview);
@@ -97,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void init(){
+    private void init(ArrayList<String> list){
         today = Calendar.getInstance();
         Calendar thisMonth = Calendar.getInstance();
         thisMonth.set(Calendar.DAY_OF_MONTH,1);     //현재 달의 첫번째날로 날짜 설정
