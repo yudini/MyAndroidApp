@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
@@ -35,16 +36,22 @@ public class MainActivity extends AppCompatActivity {
 
         Button pre = findViewById(R.id.button);
         Button next = findViewById(R.id.button2);
-        init();
-        todayDate.setText(year + "년"+month+"월");
+        int count1;
+
+         do{
+            init();
+            todayDate.setText(year + "년" + month + "월");
+        }while(false);
+         
+
 
         Intent getIn = getIntent();
         if(getIn==null){
-            init();
-            todayDate.setText(year + "년" + month + "월");    //텍스트뷰에 현재년도 및 월 띄우기
+            //init();
+            //todayDate.setText(year + "년" + month + "월");    //텍스트뷰에 현재년도 및 월 띄우기
         }
 
-        else{
+        else {
             year=getIn.getIntExtra("year",0);
             month=getIn.getIntExtra("month",0);
             date=getIn.getIntExtra("date",1);
@@ -73,16 +80,31 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("month",month-1);
                 intent.putExtra("date",date);
                 startActivity(intent);
+
+
+
+
+                todayDate.setText(year + "년" + month + "월");
             }
         });
+
+
+
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                intent.putExtra("year",year);
+                intent.putExtra("month",month+1);
+                intent.putExtra("date",date);
                 startActivity(intent);
+
+
+                todayDate.setText(year + "년" + month + "월");
             }
         });
+
 
 
         //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
@@ -113,6 +135,44 @@ public class MainActivity extends AppCompatActivity {
             list.add(Integer.toString(i));     //일 채우기
         }
 
+    }
+
+    private static final String TAG = "Lifecycle";
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, getLocalClassName() + ".onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, getLocalClassName() + ".onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, getLocalClassName() + ".onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, getLocalClassName() + ".onStop");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(TAG, getLocalClassName() + ".onRestart");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, getLocalClassName() + ".onDestroy");
     }
 
 
