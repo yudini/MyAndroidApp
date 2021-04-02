@@ -10,14 +10,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_gridview);
+
         TextView todayDate=(TextView)findViewById(R.id.date); // id를 바탕으로 화면 레이아웃에 정의된 TextView 객체 로딩
 
         Button pre = findViewById(R.id.button);
@@ -41,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         today = Calendar.getInstance();   //현재 날짜를 가진 캘린더 객체 생성
 
         getIn = getIntent();   //인텐트 입력받기
-        //!TextUtils.isEmpty(getIn.getStringExtra("year"))
         if (getIn.getIntExtra("year",0)==0){  // 인텐트 여부 확인
             init();               //초기달력정보 받아오기
         }
@@ -56,9 +59,29 @@ public class MainActivity extends AppCompatActivity {
         // id를 바탕으로 화면 레이아웃에 정의된 GridView 객체 로딩
         GridView gridview = (GridView) findViewById(R.id.gridview);
 
+        //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
+        ArrayAdapter<String> adapt
+                = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                list);
+
+        // 어댑터를 GridView 객체에 연결
+        gridview.setAdapter(adapt);
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int day=position-today.get(Calendar.DAY_OF_WEEK)+2;
+                if(day>=1)
+                    Toast.makeText(getApplicationContext(),""+today.get(Calendar.YEAR)+"."+month+"."+day,Toast.LENGTH_SHORT).show();
+            }
+        });
+
         pre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                 intent.putExtra("year",today.get(Calendar.YEAR));
                 intent.putExtra("month",today.get(Calendar.MONTH)-1);
@@ -70,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                 intent.putExtra("year",today.get(Calendar.YEAR));
                 intent.putExtra("month",today.get(Calendar.MONTH)+1);
@@ -77,17 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-        //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
-        ArrayAdapter<String> adapt
-                = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                list);
-
-        // 어댑터를 GridView 객체에 연결
-        gridview.setAdapter(adapt);
 
     }
 
