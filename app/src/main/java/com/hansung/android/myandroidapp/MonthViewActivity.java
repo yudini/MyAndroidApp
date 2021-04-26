@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.AdapterView;
@@ -31,6 +32,21 @@ public class MonthViewActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.month:
+                //월 달력으로 프래그먼트 전환하는 코드 작성
+                Toast.makeText(getApplicationContext(), "월", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.week:
+                //주 달력으로 프래그먼트 전환하는 코드 작성
+                Toast.makeText(getApplicationContext(), "주", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
