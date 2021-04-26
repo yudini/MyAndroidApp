@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import android.widget.AdapterView;
@@ -24,17 +26,24 @@ public class MonthViewActivity extends AppCompatActivity {
     ArrayList<String> list = new ArrayList<>();
     Intent getIn;
 
+    //앱바 생성
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_gridview);
 
+        today = Calendar.getInstance();   //현재 날짜를 가진 캘린더 객체 생성
+
         TextView todayDate=(TextView)findViewById(R.id.date);   // id를 바탕으로 화면 레이아웃에 정의된 TextView 객체 로딩
 
         Button pre = findViewById(R.id.button);
         Button next = findViewById(R.id.button2);
-
-        today = Calendar.getInstance();   //현재 날짜를 가진 캘린더 객체 생성
 
         getIn = getIntent();                      //인텐트 받기
         if (getIn.getIntExtra("year",0)==0){     // 전달받는 인텐트 여부 확인
@@ -44,9 +53,11 @@ public class MonthViewActivity extends AppCompatActivity {
         else{    //인텐트가 있을 때, 즉 새로운 액티비티가 생성되었을 때
             getCalendar();   //캘린더 정보 받아오기
         }
+        //앱바 타이틀 현재 년 월로 설정
+        getSupportActionBar().setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
 
-        int month=today.get(Calendar.MONTH)+1;      //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정.
-        todayDate.setText(today.get(Calendar.YEAR) + "년" + month + "월");    //텍스트뷰에 현재 연도 및 월 띄우기
+          //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정. 텍스트뷰에 현재 연도 및 월 띄우기
+        todayDate.setText(today.get(Calendar.YEAR) + "년" + (today.get(Calendar.MONTH)+1)+ "월");
 
         // id를 바탕으로 화면 레이아웃에 정의된 GridView 객체 로딩
         GridView gridview = (GridView) findViewById(R.id.gridview);
@@ -67,7 +78,8 @@ public class MonthViewActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int day=position-today.get(Calendar.DAY_OF_WEEK)+2;      //현재 일 구하기
                 if(day>=1)        //날짜가 있을 때만 토스트 메세지 띄우기
-                    Toast.makeText(getApplicationContext(),""+today.get(Calendar.YEAR)+"."+month+"."+day,Toast.LENGTH_SHORT).show();
+                    //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정
+                    Toast.makeText(getApplicationContext(),""+today.get(Calendar.YEAR)+"."+(today.get(Calendar.MONTH)+1)+"."+day,Toast.LENGTH_SHORT).show();
             }
         });
 
