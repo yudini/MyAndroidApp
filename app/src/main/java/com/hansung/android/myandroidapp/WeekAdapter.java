@@ -23,17 +23,6 @@ public class WeekAdapter extends FragmentStateAdapter {
         int month = today.get(Calendar.MONTH);  //수정
         int week = position;
 
-        /*if(today.get(Calendar.DAY_OF_WEEK)+today.getActualMaximum(Calendar.DATE)>34) {
-            year = year+month/12;
-            month = month+week/6;
-        }
-        else {
-            year = year+month / 12;
-            month = month+ week / 5;
-        }*/
-
-
-
         return WeekCalendarFragment.newInstance(year,month,week);
 
     }

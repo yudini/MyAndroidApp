@@ -101,19 +101,6 @@ public class WeekCalendarFragment extends Fragment {
         // 어댑터를 GridView 객체에 연결
         gridview.setAdapter(adapt_grid);
 
-//        // 데이터 원본 준비
-//        String[] items = {"1", "2", "3", "4", "5", "6", "7", "8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"};
-//
-//        //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
-//        ArrayAdapter<String> adapt_list
-//                = new ArrayAdapter<String>(
-//                getActivity(),
-//                android.R.layout.simple_list_item_1,
-//                items);
-//
-//        //어댑터 연결
-//        ListView list = (ListView)rootView.findViewById(R.id.listview);
-//        list.setAdapter(adapt_list);
 
         ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
         actionBar.setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
@@ -162,7 +149,7 @@ public class WeekCalendarFragment extends Fragment {
         for(int i=1;i<=lastDate;i++){
             list1.add(Integer.toString(i));     //일 채우기
         }
-        list1.add("");
+        list1.add("");   //오류방지용 뒤의 여백
         list1.add("");
         list1.add("");
         list1.add("");
