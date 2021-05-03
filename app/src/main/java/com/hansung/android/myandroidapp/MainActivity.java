@@ -20,7 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements MonthCalendarFragment.OnTitleSelectedListener {
+public class MainActivity extends AppCompatActivity implements MonthCalendarFragment.OnTitleSelectedListener_Month, WeekCalendarFragment.OnTitleSelectedListener_Week {
     // 데이터 원본 준비
     Calendar today;
     ArrayList<String> list = new ArrayList<>();
@@ -40,12 +40,14 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
                 //월 달력으로 프래그먼트 전환하는 코드 작성
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.fragment_container, new MonthViewFragment());
+                fragmentTransaction.replace(R.id.fragment_container, new MonthViewFragment());
                 fragmentTransaction.commit();
                 return true;
             case R.id.week:
-                //주 달력으로 프래그먼트 전환하는 코드 작성
-                Toast.makeText(getApplicationContext(), "주", Toast.LENGTH_SHORT).show();
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new WeekViewFragment());
+                fragmentTransaction.commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
 
         getSupportActionBar().setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
     }
-    public void onTitleSelected(int year,int month,int day,View view) {
+    public void onTitleSelected_month(int year,int month,int day,View view) {
 
         GridView gridView = findViewById(R.id.gridview);
         if(day>=1){
@@ -71,4 +73,8 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
         //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정
     }
 
+    @Override
+    public void onTitleSelected_week(int i, int j, int k) {
+
+    }
 }

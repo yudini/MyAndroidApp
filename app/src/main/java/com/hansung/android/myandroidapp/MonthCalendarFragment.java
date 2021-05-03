@@ -27,6 +27,7 @@ public class MonthCalendarFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
     private int year;
     private int month;
 
@@ -50,8 +51,8 @@ public class MonthCalendarFragment extends Fragment {
     }
 
     // 인터페이스 추가 정의
-    public interface OnTitleSelectedListener {
-        public void onTitleSelected(int i, int j, int k, View view);
+    public interface OnTitleSelectedListener_Month {
+        public void onTitleSelected_month(int i, int j, int k, View view);
     }
 
     @Override
@@ -101,8 +102,8 @@ public class MonthCalendarFragment extends Fragment {
 
                 Activity activity = getActivity();
                 // 선택된 항목 위치(position)을 OnTitleSelectedListener 인터페이스를 구현한 액티비티로 전달
-                if (activity instanceof OnTitleSelectedListener){
-                    ((OnTitleSelectedListener)activity).onTitleSelected(today.get(Calendar.YEAR),(today.get(Calendar.MONTH)),day,view);
+                if (activity instanceof OnTitleSelectedListener_Month){
+                    ((OnTitleSelectedListener_Month)activity).onTitleSelected_month(today.get(Calendar.YEAR),(today.get(Calendar.MONTH)),day,view);
                 }
             }
         });
