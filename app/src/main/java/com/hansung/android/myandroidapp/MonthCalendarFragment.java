@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -85,17 +86,17 @@ public class MonthCalendarFragment extends Fragment {
                 android.R.layout.simple_list_item_1,
                 list);
 
-        //GridAdapter adapt2 = new GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list);
+        GridAdapter adapt2 = new GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list);
 
         // 어댑터를 GridView 객체에 연결
-        gridview.setAdapter(adapt);
+        gridview.setAdapter(adapt2);
 
 
         //현재 날짜 토스트 메세지 띄우기
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                view.setBackgroundColor(Color.CYAN);
+                view.setSelected(true);
                 int day=position-today.get(Calendar.DAY_OF_WEEK)+2;      //현재 일 구하기
                 // 현재 프래그먼트와 연결된 액티비티를 반환
 
@@ -127,9 +128,6 @@ public class MonthCalendarFragment extends Fragment {
         }
 
     }
-
-
-
 
 
 }

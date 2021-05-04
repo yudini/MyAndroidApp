@@ -89,9 +89,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:numColumns="7"
-            android:gravity="center"
-            android:horizontalSpacing="1dp"
-            android:verticalSpacing="50dp" />
+            android:gravity="center" />
 
     </LinearLayout>
 
