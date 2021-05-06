@@ -1,5 +1,6 @@
 package com.hansung.android.myandroidapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
@@ -9,11 +10,13 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class GridAdapter extends BaseAdapter
@@ -22,6 +25,8 @@ public class GridAdapter extends BaseAdapter
     Context context;
     ArrayList<String> list;
     private int mResource;
+    Calendar today;
+    int height;
 
     public GridAdapter(Context context)
     {
@@ -38,6 +43,13 @@ public class GridAdapter extends BaseAdapter
         this.mResource=resource;
         this.list=list;
     }
+    public GridAdapter(Context context,int resource,ArrayList<String>list,int height){
+        this.context=context;
+        this.mResource=resource;
+        this.list=list;
+        this.height=height;
+    }
+
     @Override
     public int getCount() {
 
@@ -72,10 +84,14 @@ public class GridAdapter extends BaseAdapter
 
         text.setText(list.get(position));
 
-        text.setGravity(Gravity.CENTER);
+        text.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.TOP);  //텍스트 위치
+
+        GridView.LayoutParams params = new GridView.LayoutParams(   //그리드뷰의 사이즈 변경
+                GridView.LayoutParams.MATCH_PARENT, height);
+        text.setLayoutParams(params);
 
         text.setBackground(ContextCompat.getDrawable(
-                context,R.drawable.grideview_selector
+                context,R.drawable.grideview_selector    //item 항목 배경을 gridview_selector로 설정(state_pressed 등)
         ));
 
 

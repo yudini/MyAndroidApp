@@ -63,7 +63,7 @@ public class MonthViewFragment extends Fragment {
         FragmentStateAdapter adapter = new MonthAdapter(this);
 
         vpPager.setAdapter(adapter);
-        vpPager.setCurrentItem(month,false);  // SecondFragment를 첫 화면에 표시되도록 설정
+        vpPager.setCurrentItem(month,false);  // 첫 화면에 표시될 페이지 설정
         ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
 
 
@@ -72,8 +72,9 @@ public class MonthViewFragment extends Fragment {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 int year=today.get(Calendar.YEAR)+position/12;  //페이지에 따른 달력의 연도 설정
-                int month=position%12;                //페이지에 따른 달력의 연도 설정
+                int month=position%12;                //페이지에 따른 달력의 월 설정
                 actionBar.setTitle(year+"년"+(month+1)+"월");   //액션바 타이틀 변경
+
             }
         });
 

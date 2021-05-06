@@ -12,12 +12,14 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,29 +27,27 @@ import java.util.Calendar;
 
 public class MonthCalendarFragment extends Fragment {
 
+    //데이터 원본 준비
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
 
     private int year;
     private int month;
-
-    // 데이터 원본 준비
     Calendar today;
     ArrayList<String> list = new ArrayList<>();
-    Intent getIn;
 
     public MonthCalendarFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static MonthCalendarFragment newInstance(int year , int month) {
+    public static MonthCalendarFragment newInstance(int year , int month) {  //프래그먼트 객체 생성 함수
         MonthCalendarFragment fragment = new MonthCalendarFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, year);
+        Bundle args = new Bundle();   //인자 값을 저장한 번들 객체 생성
+        args.putInt(ARG_PARAM1, year);     //인자 값을 페어로 번들 객체에 설정
         args.putInt(ARG_PARAM2, month);
-        fragment.setArguments(args);
+        fragment.setArguments(args);    //인자값을 저장한 번들 객체를 프래그먼트로 전달
         return fragment;
     }
 
@@ -85,9 +85,20 @@ public class MonthCalendarFragment extends Fragment {
                 getActivity(),
                 android.R.layout.simple_list_item_1,
                 list);
+        //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
+        GridAdapter adapt2;
 
-        GridAdapter adapt2 = new GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list);
+        LinearLayout ll = rootView.findViewById(R.id.ll);
+        int h=ll.getHeight();  //0이됨.
 
+        //가로모드일 때
+        if(getActivity().getWindowManager().getDefaultDisplay().getRotation()
+                == Surface.ROTATION_90||getActivity().getWindowManager().getDefaultDisplay().getRotation()== Surface.ROTATION_270){
+            //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
+            adapt2 = new GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list,130);
+        }else{  //세로모드일 때
+            adapt2=new GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list,250);
+        }
         // 어댑터를 GridView 객체에 연결
         gridview.setAdapter(adapt2);
 
@@ -125,6 +136,10 @@ public class MonthCalendarFragment extends Fragment {
         }
         for(int i=1;i<=lastDate;i++){
             list.add(Integer.toString(i));     //일 채우기
+        }
+        int k=42-list.size();
+        for(int i=0;i<k;i++){
+            list.add("");
         }
 
     }

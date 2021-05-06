@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
     // 데이터 원본 준비
     Calendar today;
     ArrayList<String> list = new ArrayList<>();
-    Intent getIn;
+
 
 
     //앱바
@@ -37,13 +37,14 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.month:
-                //월 달력으로 프래그먼트 전환하는 코드 작성
+                //월 달력으로 프래그먼트 전환
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new MonthViewFragment());
                 fragmentTransaction.commit();
                 return true;
             case R.id.week:
+                //주간 달력으로 프래그먼트를 전환
                 fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new WeekViewFragment());
@@ -58,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new MonthViewFragment());
+        fragmentTransaction.commit();
 
         today = Calendar.getInstance();   //현재 날짜를 가진 캘린더 객체 생성
 
@@ -65,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
     }
     public void onTitleSelected_month(int year,int month,int day,View view) {
 
-        GridView gridView = findViewById(R.id.gridview);
         if(day>=1){
             Toast.makeText(getApplicationContext(),+year+"."+(month+1)+"."+day,Toast.LENGTH_SHORT).show();
         }

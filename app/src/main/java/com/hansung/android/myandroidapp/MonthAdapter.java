@@ -22,10 +22,10 @@ public class MonthAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
 
         today=Calendar.getInstance();
-        int year = today.get(Calendar.YEAR);   //수정
+        int year = today.get(Calendar.YEAR);
         int month =position;  //수정
 
-        return MonthCalendarFragment.newInstance(year,month);
+        return MonthCalendarFragment.newInstance(year,month);   //프래그먼트 객체 생성
 
     }
 
