@@ -128,6 +128,7 @@ public class WeekCalendarFragment extends Fragment {
                 list3);
 
 
+
         // 어댑터를 GridView 객체에 연결
         gridview.setAdapter(adapt_grid);
         gridview_week.setAdapter(adapt_grid_week);
@@ -154,9 +155,11 @@ public class WeekCalendarFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setBackgroundColor(Color.CYAN);
-               // Toast.makeText(context,"position="+position,Toast.LENGTH_SHORT).show();
+                
+                Toast.makeText(getActivity(),"position="+position,Toast.LENGTH_SHORT).show();
             }
         });
+
 
 
 
