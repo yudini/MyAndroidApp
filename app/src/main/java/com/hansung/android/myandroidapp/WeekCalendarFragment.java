@@ -127,13 +127,23 @@ public class WeekCalendarFragment extends Fragment {
                 R.layout.list_item,
                 list3);
         Week_GridAdapter g =  new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list2);
-        Week_GridAdapter g2 =  new Week_GridAdapter(getActivity(),R.layout.list_item,list3);
+//        Week_GridAdapter g2 =  new Week_GridAdapter(getActivity(),R.layout.list_item,list3);
 
+        Week_GridAdapter g2;
 
         // 어댑터를 GridView 객체에 연결
         //gridview.setAdapter(adapt_grid);
         //gridview_week.setAdapter(adapt_grid_week);
         //listView_time.setAdapter(adapt_list_time);
+
+        //가로모드일 때
+        if(getActivity().getWindowManager().getDefaultDisplay().getRotation()
+                == Surface.ROTATION_90||getActivity().getWindowManager().getDefaultDisplay().getRotation()== Surface.ROTATION_270){
+            //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
+            g2 = new Week_GridAdapter(getActivity(),R.layout.list_item,list3,130);
+        }else{  //세로모드일 때
+            g2=new Week_GridAdapter(getActivity(),R.layout.list_item,list3,250);
+        }
 
         gridview.setAdapter(g);     // ########################3
         gridview_week.setAdapter(g2); // #####################

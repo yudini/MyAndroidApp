@@ -59,10 +59,10 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new MonthViewFragment());
-        fragmentTransaction.commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, new MonthViewFragment());
+//        fragmentTransaction.commit();
 
         today = Calendar.getInstance();   //현재 날짜를 가진 캘린더 객체 생성
 
