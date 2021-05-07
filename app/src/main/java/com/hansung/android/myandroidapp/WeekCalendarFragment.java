@@ -1,22 +1,28 @@
 package com.hansung.android.myandroidapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -35,10 +41,15 @@ public class WeekCalendarFragment extends Fragment {
     private int month;
     private int week;
 
+    //private Context context;
+
     // 데이터 원본 준비
     Calendar today;
     ArrayList<String> list1 = new ArrayList<>();
     ArrayList<String> list2 = new ArrayList<>();
+    ArrayList<String> list3 = new ArrayList<>();  //주간 24*7표 공백 저장
+    //ArrayList<String> list4 = new ArrayList<>();  //시간 저장
+
     Intent getIn;
 
     public WeekCalendarFragment() {
@@ -83,13 +94,24 @@ public class WeekCalendarFragment extends Fragment {
 
         today = Calendar.getInstance();   //현재 날짜를 가진 캘린더 객체 생성
 
+        //context = container.getContext();
         // id를 바탕으로 화면 레이아웃에 정의된 GridView 객체 로딩
         GridView gridview = (GridView)rootView.findViewById(R.id.gridview);
+        GridView gridview_week = (GridView)rootView.findViewById(R.id.gridview_week);
+        //ListView listView_time = (ListView)rootView.findViewById(R.id.time);
+
+
+
 
         getCalendar();
+        getWeekCalendar();
         // init();
 
-
+//        ArrayAdapter<String> adapt_list_time
+//                = new ArrayAdapter<String>(
+//                getActivity(),
+//                android.R.layout.simple_list_item_1,
+//                list4);
 
         //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
         ArrayAdapter<String> adapt_grid
@@ -98,8 +120,20 @@ public class WeekCalendarFragment extends Fragment {
                 android.R.layout.simple_list_item_1,
                 list2);
 
+        //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
+        ArrayAdapter<String> adapt_grid_week
+                = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.list_item,
+                list3);
+
+
         // 어댑터를 GridView 객체에 연결
         gridview.setAdapter(adapt_grid);
+        gridview_week.setAdapter(adapt_grid_week);
+        //listView_time.setAdapter(adapt_list_time);
+
+
 
 
         ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
@@ -110,22 +144,33 @@ public class WeekCalendarFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //gridview.setBackgroundColor(Color.BLACK);
-                //view.setBackgroundColor(Color.CYAN);
-                int day=position-today.get(Calendar.DAY_OF_WEEK)+2;      //현재 일 구하기
-                // 현재 프래그먼트와 연결된 액티비티를 반환
+                view.setBackgroundColor(Color.CYAN);
 
 
-                Activity activity = getActivity();
-                // 선택된 항목 위치(position)을 OnTitleSelectedListener 인터페이스를 구현한 액티비티로 전달
-                if (activity instanceof OnTitleSelectedListener_Week){
-                    ((OnTitleSelectedListener_Week)activity).onTitleSelected_week(today.get(Calendar.YEAR),(today.get(Calendar.MONTH)),day);
-                }
+            }
+        });
+        //현재 날짜 토스트 메세지 띄우기
+        gridview_week.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                view.setBackgroundColor(Color.CYAN);
+               // Toast.makeText(context,"position="+position,Toast.LENGTH_SHORT).show();
             }
         });
 
+
+
+
+
         return rootView;
 
+    }
+
+    private void getWeekCalendar(){
+        for(int i=1;i<=168;i++){
+            list3.add("");}
+        //for(int i=0;i<=24;i++)
+        //    list4.add(Integer.toString(i));
     }
 
     //달력 정보를 가져오는 함수,인텐트로 새로운 달력 정보를 가져올 경우
