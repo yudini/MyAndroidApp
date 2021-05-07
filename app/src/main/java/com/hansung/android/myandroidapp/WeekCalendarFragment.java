@@ -126,13 +126,17 @@ public class WeekCalendarFragment extends Fragment {
                 getActivity(),
                 R.layout.list_item,
                 list3);
-
+        Week_GridAdapter g =  new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list2);
+        Week_GridAdapter g2 =  new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list3);
 
 
         // 어댑터를 GridView 객체에 연결
         gridview.setAdapter(adapt_grid);
         gridview_week.setAdapter(adapt_grid_week);
         //listView_time.setAdapter(adapt_list_time);
+
+        //gridview.setAdapter(g);      ########################3
+        //gridview_week.setAdapter(g2);  #####################
 
 
 
@@ -145,6 +149,7 @@ public class WeekCalendarFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               // view.setSelected(true);   ###########################
                 view.setBackgroundColor(Color.CYAN);
 
 
@@ -154,6 +159,7 @@ public class WeekCalendarFragment extends Fragment {
         gridview_week.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               // view.setSelected(true);  ########################
                 view.setBackgroundColor(Color.CYAN);
                 
                 Toast.makeText(getActivity(),"position="+position,Toast.LENGTH_SHORT).show();
