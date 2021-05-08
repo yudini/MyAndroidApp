@@ -40,15 +40,14 @@ public class WeekCalendarFragment extends Fragment {
     private int year;
     private int month;
     private int week;
+    private int pos;
 
-    //private Context context;
 
     // 데이터 원본 준비
     Calendar today;
     ArrayList<String> list1 = new ArrayList<>();
     ArrayList<String> list2 = new ArrayList<>();
     ArrayList<String> list3 = new ArrayList<>();  //주간 24*7표 공백 저장
-    //ArrayList<String> list4 = new ArrayList<>();  //시간 저장
 
     Intent getIn;
 
@@ -94,24 +93,13 @@ public class WeekCalendarFragment extends Fragment {
 
         today = Calendar.getInstance();   //현재 날짜를 가진 캘린더 객체 생성
 
-        //context = container.getContext();
+
         // id를 바탕으로 화면 레이아웃에 정의된 GridView 객체 로딩
         GridView gridview = (GridView)rootView.findViewById(R.id.gridview);
         GridView gridview_week = (GridView)rootView.findViewById(R.id.gridview_week);
-        //ListView listView_time = (ListView)rootView.findViewById(R.id.time);
-
-
-
 
         getCalendar();
         getWeekCalendar();
-        // init();
-
-//        ArrayAdapter<String> adapt_list_time
-//                = new ArrayAdapter<String>(
-//                getActivity(),
-//                android.R.layout.simple_list_item_1,
-//                list4);
 
         //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
         ArrayAdapter<String> adapt_grid
@@ -127,14 +115,8 @@ public class WeekCalendarFragment extends Fragment {
                 R.layout.list_item,
                 list3);
         Week_GridAdapter g =  new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list2);
-//        Week_GridAdapter g2 =  new Week_GridAdapter(getActivity(),R.layout.list_item,list3);
 
         Week_GridAdapter g2;
-
-        // 어댑터를 GridView 객체에 연결
-        //gridview.setAdapter(adapt_grid);
-        //gridview_week.setAdapter(adapt_grid_week);
-        //listView_time.setAdapter(adapt_list_time);
 
         //가로모드일 때
         if(getActivity().getWindowManager().getDefaultDisplay().getRotation()
@@ -145,42 +127,29 @@ public class WeekCalendarFragment extends Fragment {
             g2=new Week_GridAdapter(getActivity(),R.layout.list_item,list3,250);
         }
 
-        gridview.setAdapter(g);     // ########################3
-        gridview_week.setAdapter(g2); // #####################
-
-
-
+        gridview.setAdapter(g);
+        gridview_week.setAdapter(g2);
 
         ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
         actionBar.setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
 
+        //현재 날짜 토스트 메세지 띄우기
+        gridview_week.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position1, long id) {
+                view.setSelected(true);
+
+                Toast.makeText(getActivity(),"position="+position1,Toast.LENGTH_SHORT).show();
+            }
+        });
 
         //현재 날짜 토스트 메세지 띄우기
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                view.setSelected(true);  // ###########################
-                //view.setBackgroundColor(Color.CYAN);
-
-
+                view.setSelected(true);
             }
         });
-        //현재 날짜 토스트 메세지 띄우기
-        gridview_week.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                view.setSelected(true);  //########################
-                //view.setBackgroundColor(Color.CYAN);
-                
-                Toast.makeText(getActivity(),"position="+position,Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
-
-
-
         return rootView;
 
     }
@@ -188,8 +157,6 @@ public class WeekCalendarFragment extends Fragment {
     private void getWeekCalendar(){
         for(int i=1;i<=168;i++){
             list3.add("");}
-        //for(int i=0;i<=24;i++)
-        //    list4.add(Integer.toString(i));
     }
 
     //달력 정보를 가져오는 함수,인텐트로 새로운 달력 정보를 가져올 경우
@@ -257,14 +224,5 @@ public class WeekCalendarFragment extends Fragment {
                 }
                 break;
         }
-
-        System.out.println(list1);
-        System.out.println(list2);
-        System.out.println(startDate-1+lastDate);
-
     }
-
-
-
-
 }

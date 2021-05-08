@@ -77,7 +77,6 @@ public class MonthCalendarFragment extends Fragment {
         GridView gridview = (GridView)rootView.findViewById(R.id.gridview);
 
         getCalendar();
-        //init();
 
         //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
         ArrayAdapter<String> adapt

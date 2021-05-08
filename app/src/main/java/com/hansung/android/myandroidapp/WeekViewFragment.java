@@ -61,7 +61,6 @@ public class WeekViewFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         today=Calendar.getInstance();
-       // int month= today.get(Calendar.MONTH);
         int week= today.get(Calendar.WEEK_OF_MONTH);
         View rootView = inflater.inflate(R.layout.fragment_week_view,container, false);
         ViewPager2 vpPager = rootView.findViewById(R.id.vpPager_week);
