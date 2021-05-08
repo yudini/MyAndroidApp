@@ -80,14 +80,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/black"
+        android:layout_weight="1"
         android:id="@+id/ll">
 
 
         <GridView
             android:id="@+id/gridview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="100dp"
             android:background="@color/design_default_color_primary"
             android:layout_weight="1"
             android:verticalSpacing="2dp"
@@ -95,8 +95,8 @@
             android:gravity="center"
             android:numColumns="7" />
 
-    </LinearLayout>
 
+    </LinearLayout>
 
 
 </LinearLayout>
