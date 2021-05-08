@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
 
         today = Calendar.getInstance();   //현재 날짜를 가진 캘린더 객체 생성
 
-        getSupportActionBar().setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
+        getSupportActionBar().setTitle("Month&Week Calendar");
     }
     public void onTitleSelected_month(int year,int month,int day,View view) {
 

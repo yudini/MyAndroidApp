@@ -127,6 +127,8 @@ public class MonthCalendarFragment extends Fragment {
     private void getCalendar(){
 
         today.set(year,month,1);                             //현재 년도 및 월 설정.
+        ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
+        actionBar.setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
         int lastDate = today.getActualMaximum(Calendar.DATE);  //이번달의 마지막 날 얻어서 저장
         int startDate = today.get(Calendar.DAY_OF_WEEK);   //이번달의 시작요일 얻어서 저장
 
