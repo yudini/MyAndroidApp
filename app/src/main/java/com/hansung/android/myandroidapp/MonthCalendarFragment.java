@@ -53,7 +53,7 @@ public class MonthCalendarFragment extends Fragment {
 
     // 인터페이스 추가 정의
     public interface OnTitleSelectedListener_Month {
-        public void onTitleSelected_month(int i, int j, int k, View view);
+        public void onTitleSelected_month(int i, int j, int k);
     }
 
     @Override
@@ -102,10 +102,11 @@ public class MonthCalendarFragment extends Fragment {
 
 
                 Activity activity = getActivity();
-                // 선택된 항목 위치(position)을 OnTitleSelectedListener 인터페이스를 구현한 액티비티로 전달
-                if (activity instanceof OnTitleSelectedListener_Month){
-                    ((OnTitleSelectedListener_Month)activity).onTitleSelected_month(today.get(Calendar.YEAR),(today.get(Calendar.MONTH)),day,view);
+                if(day>=1){
+                    Toast.makeText(getActivity(),today.get(Calendar.YEAR)+"."+((today.get(Calendar.MONTH))+1)+"."+day,Toast.LENGTH_SHORT).show();
                 }
+                //날짜가 있을때만 토스트 메세지 띄우기
+                //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정
             }
         });
 

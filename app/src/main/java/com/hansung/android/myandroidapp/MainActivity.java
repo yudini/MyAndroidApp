@@ -64,13 +64,8 @@ public class MainActivity extends AppCompatActivity implements MonthCalendarFrag
 
         getSupportActionBar().setTitle("Month&Week Calendar");
     }
-    public void onTitleSelected_month(int year,int month,int day,View view) {
+    public void onTitleSelected_month(int year,int month,int day) {
 
-        if(day>=1){
-            Toast.makeText(getApplicationContext(),+year+"."+(month+1)+"."+day,Toast.LENGTH_SHORT).show();
-        }
-        //날짜가 있을때만 토스트 메세지 띄우기
-        //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정
     }
 
     @Override
