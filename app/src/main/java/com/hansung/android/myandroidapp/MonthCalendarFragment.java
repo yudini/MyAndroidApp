@@ -78,17 +78,7 @@ public class MonthCalendarFragment extends Fragment {
 
         getCalendar();
 
-        //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
-        ArrayAdapter<String> adapt
-                = new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                list);
-        //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
         GridAdapter adapt2;
-
-        LinearLayout ll = rootView.findViewById(R.id.ll);
-        int h=ll.getHeight();  //0이됨.
 
         //가로모드일 때
         if(getActivity().getWindowManager().getDefaultDisplay().getRotation()
