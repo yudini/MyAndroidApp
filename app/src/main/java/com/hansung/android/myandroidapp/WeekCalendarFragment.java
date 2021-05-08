@@ -168,11 +168,7 @@ public class WeekCalendarFragment extends Fragment {
         actionBar.setTitle(today.get(Calendar.YEAR)+"년"+(today.get(Calendar.MONTH)+1)+"월");
         int lastDate = today.getActualMaximum(Calendar.DATE);  //이번달의 마지막 날 얻어서 저장
         int startDate = today.get(Calendar.DAY_OF_WEEK);   //이번달의 시작요일 얻어서 저장
-
-
-        System.out.println("getCalendar 호출");
-        System.out.println(week);
-        System.out.println("year:"+today.get(Calendar.YEAR)+"month:"+(today.get(Calendar.MONTH)+1)+lastDate);
+        
 
         for(int i=0;i<startDate-1;i++){
             list1.add("");                //공백으로 채우기
