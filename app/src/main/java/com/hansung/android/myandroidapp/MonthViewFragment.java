@@ -1,7 +1,5 @@
 package com.hansung.android.myandroidapp;
 
-//import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -13,9 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.time.Year;
 import java.util.Calendar;
@@ -55,7 +50,6 @@ public class MonthViewFragment extends Fragment {
             mParam1 = getArguments().getInt(ARG_PARAM1);
             mParam2 = getArguments().getInt(ARG_PARAM2);
         }
-
     }
 
     @Override
@@ -81,15 +75,6 @@ public class MonthViewFragment extends Fragment {
                 int month=position%12;                //페이지에 따른 달력의 월 설정
                 actionBar.setTitle(year+"년"+(month+1)+"월");   //액션바 타이틀 변경
 
-            }
-        });
-
-        FloatingActionButton fab = rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                startActivity(intent);
             }
         });
 
