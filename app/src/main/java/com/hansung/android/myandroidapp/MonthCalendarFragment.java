@@ -96,10 +96,14 @@ public class MonthCalendarFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
                 view.setSelected(true);
                 int day=position-today.get(Calendar.DAY_OF_WEEK)+2;      //현재 일 구하기
                 // 현재 프래그먼트와 연결된 액티비티를 반환
 
+                //bundle.putInt("day",day);
+               // MonthViewFragment m = new MonthViewFragment();
+               // m.setArguments(bundle);
 
                 Activity activity = getActivity();
                 if(day>=1){
@@ -107,7 +111,10 @@ public class MonthCalendarFragment extends Fragment {
                 }
                 //날짜가 있을때만 토스트 메세지 띄우기
                 //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정
+
             }
+
+
         });
 
         return rootView;
