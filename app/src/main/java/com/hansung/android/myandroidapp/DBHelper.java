@@ -27,17 +27,17 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertUserBySQL(String date, String title,String address,String memo) {
+    public void insertUserBySQL(String date, String title,String startTime,String endTime,String address,String memo) {
         try {
             String sql = String.format (
-                    "INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (NULL, '%s', '%s', '%s', '%s')",
+                    "INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES (NULL, '%s', '%s', '%s', '%s', '%s')",
                     UserContract.Users.TABLE_NAME,
                     UserContract.Users._ID,
-                    UserContract.Users.KEY_DATE,
                     UserContract.Users.KEY_TITLE,
+                    UserContract.Users.KEY_STARTTIME,
+                    UserContract.Users.KEY_ENDTIME,
                     UserContract.Users.KEY_ADDRESS,
                     UserContract.Users.KEY_MEMO,
-                    date,
                     title,
                     address,
                     memo);

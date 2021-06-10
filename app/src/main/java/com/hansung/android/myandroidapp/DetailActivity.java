@@ -1,21 +1,24 @@
 package com.hansung.android.myandroidapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -29,22 +32,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     private FusedLocationProviderClient mFusedLocationClient;
     private EditText title;
     private Button findButton;
-    private Button save;
-    private Button delete;
-    private Button cancel;
     private EditText address ;
     private String today;
+    private TimePicker startTimePicker;
+    private TimePicker endTimePicker;
 
-    private Geocoder geocoder;
     private DBHelper mDbHelper;
     final int REQUEST_PERMISSIONS_FOR_LAST_KNOWN_LOCATION = 0;
     Location mLastLocation;
@@ -59,16 +59,21 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         int month =intent.getIntExtra("month",0);
         today = Integer.toString(year) + "년" +Integer.toString(month)+"월";
 
+        mDbHelper = new DBHelper(this);
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         title=findViewById(R.id.title);
         findButton = findViewById(R.id.search);
         address = findViewById(R.id.address);
-        save = (Button)findViewById(R.id.save);
-        cancel = (Button)findViewById(R.id.cancel);
-        delete = (Button)findViewById(R.id.delete);
+        startTimePicker = findViewById(R.id.start);
+        endTimePicker =findViewById(R.id.end);
+        Button save = (Button)findViewById(R.id.save);
+        Button cancel = (Button)findViewById(R.id.cancel);
+        Button delete = (Button)findViewById(R.id.delete);
 
         save.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 insertRecord();
@@ -79,7 +84,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                finish();
             }
         });
 
@@ -90,16 +95,21 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
-        mDbHelper = new DBHelper(this);
-
-
         title.setText(year+"년"+month+"월");
+
         getLastLocation();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void insertRecord(){
         TextView memo = (TextView)findViewById(R.id.memo);
-        mDbHelper.insertUserBySQL(today,title.getText().toString(),address.getText().toString(),memo.getText().toString());
+        Integer.toString(startTimePicker.getHour());
+        String startHour = Integer.toString(startTimePicker.getHour());
+        String startMin = Integer.toString(startTimePicker.getMinute());
+        String endHour = Integer.toString(endTimePicker.getHour());
+        String endMin = Integer.toString(endTimePicker.getHour());
+        mDbHelper.insertUserBySQL(today,title.getText().toString(),startHour+":"+startMin,
+                endHour+":"+endMin, address.getText().toString(),memo.getText().toString());
     }
 
     private void deleteRecord(){
@@ -149,41 +159,38 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             return;
 
         findButton.setOnClickListener(new Button.OnClickListener(){
+            Address ad;
 
             @Override
             public void onClick(View v) {
-                String str=address.getText().toString();
-                List<Address> addressList =null;
+
                 try {
-                    addressList=geocoder.getFromLocationName("Hansung",10);
+                    Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.KOREA);
+                    String str=address.getText().toString();
+                    List<Address> addresses = geocoder.getFromLocationName(str,1);
+                    if (addresses.size() >0) {
+                        ad = (Address) addresses.get(0);
+                    }
+                } catch (IOException e) {
+                    Log.e(getClass().toString(),"Failed in using Geocoder.", e);
+                    return;
                 }
-                catch(IOException e){
-                    e.printStackTrace();
-                    Log.e("test","서버에서 주소변환시 에러발생");
-                }
+                Double latitude = ad.getLatitude();
+                Double longitude = ad.getLongitude();
 
-                String []splitStr=addressList.get(0).toString().split(",");
-                String ad =splitStr[0].substring(splitStr[0].indexOf("\"")+1,splitStr[0].length()-2);
-
-                String latitude =splitStr[10].substring(splitStr[10].indexOf("=")+1); //위도
-                String longitude = splitStr[12].substring(splitStr[12].indexOf("=")+1); //경도
-
-                LatLng point = new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));   //좌표(위도,경도)생성
+                LatLng point = new LatLng(latitude,longitude);   //좌표(위도,경도)생성
                 MarkerOptions mOptions = new MarkerOptions(); //마커 생성
                 mOptions.title("search result");
-                mOptions.snippet(ad);
-                googleMap.addMarker(mOptions);
+                googleMap.addMarker(
+                        new MarkerOptions().
+                                position(point).
+                                title(".."));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(point,15));
 
             }
 
         });
 
-        LatLng location= new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude());
-        googleMap.addMarker(
-                new MarkerOptions().
-                        position(location).
-                        title("한성대학교"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,15));
     }
+
 }
