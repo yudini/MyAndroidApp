@@ -32,9 +32,6 @@ public class MonthViewFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private int mParam1;
     private int mParam2;
-    private int day;
-    private int year;
-    private int month;
 
     public MonthViewFragment() {
         // Required empty public constructor
@@ -54,9 +51,9 @@ public class MonthViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            day = bundle.getInt("day"); //day 받기.
+        if (getArguments() != null) {
+            mParam1 = getArguments().getInt(ARG_PARAM1);
+            mParam2 = getArguments().getInt(ARG_PARAM2);
         }
 
     }
@@ -66,8 +63,7 @@ public class MonthViewFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         today=Calendar.getInstance();
-        year=today.get(Calendar.YEAR);
-        month= today.get(Calendar.MONTH);
+        int month= today.get(Calendar.MONTH);
         View rootView = inflater.inflate(R.layout.fragment_month_view,container, false);
         ViewPager2 vpPager = rootView.findViewById(R.id.vpPager);
         FragmentStateAdapter adapter = new MonthAdapter(this);
@@ -81,8 +77,8 @@ public class MonthViewFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                year=today.get(Calendar.YEAR)+position/12;  //페이지에 따른 달력의 연도 설정
-                month=position%12;                //페이지에 따른 달력의 월 설정
+                int year=today.get(Calendar.YEAR)+position/12;  //페이지에 따른 달력의 연도 설정
+                int month=position%12;                //페이지에 따른 달력의 월 설정
                 actionBar.setTitle(year+"년"+(month+1)+"월");   //액션바 타이틀 변경
 
             }
@@ -93,8 +89,6 @@ public class MonthViewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("year",year);
-                intent.putExtra("month",month+1);
                 startActivity(intent);
             }
         });
