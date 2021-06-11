@@ -34,6 +34,7 @@ public class MonthCalendarFragment extends Fragment {
 
     private int year;
     private int month;
+    int day;
     Calendar today;
     ArrayList<String> list = new ArrayList<>();
 
@@ -98,7 +99,7 @@ public class MonthCalendarFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
                 view.setSelected(true);
-                int day=position-today.get(Calendar.DAY_OF_WEEK)+2;      //현재 일 구하기
+                day=position-today.get(Calendar.DAY_OF_WEEK)+2;      //현재 일 구하기
                 // 현재 프래그먼트와 연결된 액티비티를 반환
 
                 //bundle.putInt("day",day);

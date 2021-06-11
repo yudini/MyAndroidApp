@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.time.Month;
 import java.time.Year;
 import java.util.Calendar;
 
@@ -56,7 +57,7 @@ public class MonthViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            day = bundle.getInt("day"); //day 받기.
+            //day = bundle.getInt("day"); //day 받기.
         }
 
     }
@@ -92,9 +93,12 @@ public class MonthViewFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                Bundle bundle = getArguments();
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("year",year);
                 intent.putExtra("month",month+1);
+                day=bundle.getInt("day");
+                System.out.println(day);
                 startActivity(intent);
             }
         });

@@ -5,7 +5,7 @@ import android.provider.BaseColumns;
 public final class UserContract {
     public static final String DB_NAME="user.db";
     public static final int DATABASE_VERSION=1;
-    public static final String TEXT_TYPE="TEXT";
+    public static final String TEXT_TYPE=" TEXT";
     public static final String COMMA_SEP =",";
 
     private UserContract(){
