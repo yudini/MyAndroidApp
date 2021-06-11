@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -31,10 +32,9 @@ public class MonthCalendarFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-
     private int year;
     private int month;
-    int day;
+    public static int day;
     Calendar today;
     ArrayList<String> list = new ArrayList<>();
 
@@ -48,14 +48,18 @@ public class MonthCalendarFragment extends Fragment {
         Bundle args = new Bundle();   //인자 값을 저장한 번들 객체 생성
         args.putInt(ARG_PARAM1, year);     //인자 값을 페어로 번들 객체에 설정
         args.putInt(ARG_PARAM2, month);
-        fragment.setArguments(args);    //인자값을 저장한 번들 객체를 프래그먼트로 전달
+        fragment.setArguments(args); //인자값을 저장한 번들 객체를 프래그먼트로 전달
+
         return fragment;
     }
+
+
 
     // 인터페이스 추가 정의
     public interface OnTitleSelectedListener_Month {
         public void onTitleSelected_month(int i, int j, int k);
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,18 +101,21 @@ public class MonthCalendarFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle bundle = new Bundle();
+
                 view.setSelected(true);
                 day=position-today.get(Calendar.DAY_OF_WEEK)+2;      //현재 일 구하기
                 // 현재 프래그먼트와 연결된 액티비티를 반환
 
-                //bundle.putInt("day",day);
-               // MonthViewFragment m = new MonthViewFragment();
-               // m.setArguments(bundle);
+
+
 
                 Activity activity = getActivity();
                 if(day>=1){
                     Toast.makeText(getActivity(),today.get(Calendar.YEAR)+"."+((today.get(Calendar.MONTH))+1)+"."+day,Toast.LENGTH_SHORT).show();
+                    MonthViewFragment m = new MonthViewFragment();
+                    Bundle DATE = new Bundle();
+                    DATE.putInt("day",day);
+                    m.setArguments(DATE);
                 }
                 //날짜가 있을때만 토스트 메세지 띄우기
                 //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정
@@ -117,6 +124,9 @@ public class MonthCalendarFragment extends Fragment {
 
 
         });
+
+        int test = getArguments().getInt("day");
+        System.out.println(test);
 
         return rootView;
 

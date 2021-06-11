@@ -33,7 +33,7 @@ public class MonthViewFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private int mParam1;
     private int mParam2;
-    private int day;
+    public static int day;
     private int year;
     private int month;
 
@@ -43,7 +43,7 @@ public class MonthViewFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static MonthViewFragment newInstance(int param1, int param2) {
+    public static MonthViewFragment newInstance(int param1, int param2, int param3) {
         MonthViewFragment fragment = new MonthViewFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, param1);
@@ -55,9 +55,11 @@ public class MonthViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            //day = bundle.getInt("day"); //day 받기.
+        Bundle DATE = getArguments();
+
+
+        if (DATE != null) {
+            day = DATE.getInt("day");
         }
 
     }
@@ -66,6 +68,7 @@ public class MonthViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Bundle DATE = getArguments();
         today=Calendar.getInstance();
         year=today.get(Calendar.YEAR);
         month= today.get(Calendar.MONTH);
@@ -77,6 +80,11 @@ public class MonthViewFragment extends Fragment {
         vpPager.setCurrentItem(month,false);  // 첫 화면에 표시될 페이지 설정
         ActionBar actionBar =((MainActivity)getActivity()).getSupportActionBar();
 
+        if (getArguments() != null)
+        {
+            day = getArguments().getInt("day"); // 프래그먼트1에서 받아온 값 넣기
+
+        }
 
         vpPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {  //페이지 변화가 일어날때
             @Override
@@ -97,8 +105,8 @@ public class MonthViewFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("year",year);
                 intent.putExtra("month",month+1);
-                day=bundle.getInt("day");
-                System.out.println(day);
+                intent.putExtra("day", day);
+              //  System.out.println(day);
                 startActivity(intent);
             }
         });

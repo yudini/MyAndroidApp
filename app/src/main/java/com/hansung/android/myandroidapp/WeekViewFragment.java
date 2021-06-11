@@ -1,5 +1,6 @@
 package com.hansung.android.myandroidapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.Year;
 import java.util.Calendar;
@@ -29,6 +32,9 @@ public class WeekViewFragment extends Fragment {
     private int mParam1;
     private int mParam2;
     private int mparam3;
+    private int year;
+    private int month;
+    private int week;
 
     public WeekViewFragment() {
         // Required empty public constructor
@@ -61,7 +67,9 @@ public class WeekViewFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         today=Calendar.getInstance();
-        int week= today.get(Calendar.WEEK_OF_MONTH);
+        year=today.get(Calendar.YEAR);
+        month= today.get(Calendar.MONTH);
+        week= today.get(Calendar.WEEK_OF_MONTH);
         View rootView = inflater.inflate(R.layout.fragment_week_view,container, false);
         ViewPager2 vpPager = rootView.findViewById(R.id.vpPager_week);
         FragmentStateAdapter adapter = new WeekAdapter(this);
@@ -76,10 +84,22 @@ public class WeekViewFragment extends Fragment {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 int week = position;
-                int month=today.get(Calendar.MONTH)+week/6; //페이지에 따른 달력의 연도 설정
-                int year=today.get(Calendar.YEAR)+month/12;  //페이지에 따른 달력의 연도 설정
+                month=today.get(Calendar.MONTH)+week/6; //페이지에 따른 달력의 연도 설정
+                year=today.get(Calendar.YEAR)+month/12;  //페이지에 따른 달력의 연도 설정
 
                 actionBar.setTitle(year+"년"+(month+1)+"월");   //액션바 타이틀 변경
+            }
+        });
+
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra("year",year);
+                intent.putExtra("month",month+1);
+                intent.putExtra("day", week);
+                startActivity(intent);
             }
         });
 

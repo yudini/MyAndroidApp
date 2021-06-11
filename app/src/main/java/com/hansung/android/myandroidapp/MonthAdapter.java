@@ -26,9 +26,12 @@ public class MonthAdapter extends FragmentStateAdapter {
         int year = today.get(Calendar.YEAR);
         int month =position;  //수정
 
+
         return MonthCalendarFragment.newInstance(year,month);   //프래그먼트 객체 생성
 
     }
+
+
 
     // 전체 페이지 개수 반환
     @Override

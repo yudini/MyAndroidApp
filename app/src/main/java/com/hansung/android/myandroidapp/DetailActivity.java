@@ -57,7 +57,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         Intent intent = getIntent();
         int year = intent.getIntExtra("year",0);
         int month =intent.getIntExtra("month",0);
-        today = Integer.toString(year) + "/" +Integer.toString(month)+"/";
+        int day = intent.getIntExtra("day", 0);
+        today = Integer.toString(year) + "/" +Integer.toString(month)+"/" + Integer.toString(year)+"/";
 
         mDbHelper = new DBHelper(this);
 
@@ -95,7 +96,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
-        title.setText(year+"년"+month+"월");
+        title.setText(year+"년"+month+"월"+day+"일");
 
         getLastLocation();
     }
