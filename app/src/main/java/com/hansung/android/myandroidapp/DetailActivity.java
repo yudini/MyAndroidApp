@@ -57,7 +57,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         Intent intent = getIntent();
         int year = intent.getIntExtra("year",0);
         int month =intent.getIntExtra("month",0);
-        today = Integer.toString(year) + "년" +Integer.toString(month)+"월";
+        today = Integer.toString(year) + "/" +Integer.toString(month)+"/";
 
         mDbHelper = new DBHelper(this);
 
