@@ -6,12 +6,16 @@ import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.squareup.otto.Subscribe;
+
 import java.time.Month;
 import java.time.Year;
 import java.util.Calendar;
@@ -27,6 +31,7 @@ public class MonthViewFragment extends Fragment {
     public static int day;
     private int year;
     private int month;
+    private int DATE2;
     public MonthViewFragment() {
         // Required empty public constructor
     }
@@ -42,12 +47,14 @@ public class MonthViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Bundle DATE = getArguments();
+        BusProvider.getInstance().register(this);
 
-        //if (DATE != null) {
-        //    day = DATE.getInt("day");
-        //  }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -87,7 +94,7 @@ public class MonthViewFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("year",year);
                 intent.putExtra("month",month+1);
-                intent.putExtra("day", 12);
+                intent.putExtra("day", DATE2);
                 //  System.out.println(day);
 
                 startActivity(intent);
@@ -95,5 +102,10 @@ public class MonthViewFragment extends Fragment {
         });
         // Inflate the layout for this fragment
         return rootView;
+    }
+    @Subscribe
+    public void getPost(Integer day) {
+        Log.d("First", day + "");
+        DATE2 = day;
     }
 }
