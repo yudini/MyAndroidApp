@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.drawable.AnimationDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -58,13 +59,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         int year = intent.getIntExtra("year",0);
         int month =intent.getIntExtra("month",0);
         int day = intent.getIntExtra("day", 0);
-        today = Integer.toString(year) + "/" +Integer.toString(month)+"/" + Integer.toString(year)+"/";
+        today = Integer.toString(year) + "/" +Integer.toString(month)+"/" + Integer.toString(day)+"/";
 
         mDbHelper = new DBHelper(this);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        title=findViewById(R.id.title);
+        title=(EditText)findViewById(R.id.title);
         findButton = findViewById(R.id.search);
         address = findViewById(R.id.address);
         startTimePicker = findViewById(R.id.start);
@@ -78,7 +79,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 insertRecord();
-                finish();
+                viewAllToTextView();
+
             }
         });
 
@@ -92,6 +94,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deleteRecord();
+                viewAllToTextView();
 
             }
         });
@@ -114,7 +118,25 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void deleteRecord(){
+        //mDbHelper.deleteUserBySQL();
+    }
 
+    private void viewAllToTextView() {
+        TextView result = (TextView)findViewById(R.id.result);
+
+        Cursor cursor = mDbHelper.getAllUsersBySQL();
+
+        StringBuffer buffer = new StringBuffer();
+        while (cursor.moveToNext()) {
+            buffer.append(cursor.getInt(0)+" \t");
+            buffer.append(cursor.getString(1)+" \t");
+            buffer.append(cursor.getString(2)+"\n");
+            buffer.append(cursor.getString(3)+" \t");
+            buffer.append(cursor.getString(4)+"\n");
+            buffer.append(cursor.getString(5)+" \t");
+            buffer.append(cursor.getString(6)+"\n");
+        }
+        result.setText(buffer);
     }
 
 

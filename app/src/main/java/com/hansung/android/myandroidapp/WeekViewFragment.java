@@ -8,12 +8,14 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.otto.Subscribe;
 
 import java.time.Year;
 import java.util.Calendar;
@@ -35,6 +37,7 @@ public class WeekViewFragment extends Fragment {
     private int year;
     private int month;
     private int week;
+    private int DATE;
 
     public WeekViewFragment() {
         // Required empty public constructor
@@ -55,6 +58,8 @@ public class WeekViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BusProvider.getInstance().register(this);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getInt(ARG_PARAM1);
             mParam2 = getArguments().getInt(ARG_PARAM2);
@@ -62,7 +67,16 @@ public class WeekViewFragment extends Fragment {
         }
     }
 
+
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BusProvider.getInstance().unregister(this);
+    }
+
+
+
+        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -70,6 +84,7 @@ public class WeekViewFragment extends Fragment {
         year=today.get(Calendar.YEAR);
         month= today.get(Calendar.MONTH);
         week= today.get(Calendar.WEEK_OF_MONTH);
+
         View rootView = inflater.inflate(R.layout.fragment_week_view,container, false);
         ViewPager2 vpPager = rootView.findViewById(R.id.vpPager_week);
         FragmentStateAdapter adapter = new WeekAdapter(this);
@@ -91,6 +106,8 @@ public class WeekViewFragment extends Fragment {
             }
         });
 
+
+
         FloatingActionButton fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -98,7 +115,7 @@ public class WeekViewFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("year",year);
                 intent.putExtra("month",month+1);
-                intent.putExtra("day", week);
+                intent.putExtra("day", DATE);
                 startActivity(intent);
             }
         });
@@ -106,4 +123,12 @@ public class WeekViewFragment extends Fragment {
         // Inflate the layout for this fragment
         return rootView;
     }
+
+    @Subscribe
+    public void getPost(Integer position1) {
+        Log.d("First", position1 + "");
+        DATE = position1;
+    }
+
+
 }

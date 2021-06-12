@@ -56,6 +56,7 @@ public class MonthViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle DATE = getArguments();
+        BusProvider.getInstance().register(this);
 
 
         if (DATE != null) {
@@ -63,6 +64,7 @@ public class MonthViewFragment extends Fragment {
         }
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +74,7 @@ public class MonthViewFragment extends Fragment {
         today=Calendar.getInstance();
         year=today.get(Calendar.YEAR);
         month= today.get(Calendar.MONTH);
+        day = today.get(Calendar.DATE);
         View rootView = inflater.inflate(R.layout.fragment_month_view,container, false);
         ViewPager2 vpPager = rootView.findViewById(R.id.vpPager);
         FragmentStateAdapter adapter = new MonthAdapter(this);
@@ -91,7 +94,8 @@ public class MonthViewFragment extends Fragment {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 year=today.get(Calendar.YEAR)+position/12;  //페이지에 따른 달력의 연도 설정
-                month=position%12;                //페이지에 따른 달력의 월 설정
+                month=position%12;//페이지에 따른 달력의 월 설정
+
                 actionBar.setTitle(year+"년"+(month+1)+"월");   //액션바 타이틀 변경
 
             }
@@ -105,7 +109,7 @@ public class MonthViewFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("year",year);
                 intent.putExtra("month",month+1);
-                intent.putExtra("day", day);
+                intent.putExtra("day", day+1);
               //  System.out.println(day);
                 startActivity(intent);
             }
@@ -114,4 +118,10 @@ public class MonthViewFragment extends Fragment {
         // Inflate the layout for this fragment
         return rootView;
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BusProvider.getInstance().unregister(this);
+    }
+
 }

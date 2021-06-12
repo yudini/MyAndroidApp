@@ -48,6 +48,7 @@ public class WeekCalendarFragment extends Fragment {
     ArrayList<String> list1 = new ArrayList<>();
     ArrayList<String> list2 = new ArrayList<>();
     ArrayList<String> list3 = new ArrayList<>();  //주간 24*7표 공백 저장
+    ArrayList<String> list4 = new ArrayList<>();
 
     Intent getIn;
 
@@ -80,6 +81,7 @@ public class WeekCalendarFragment extends Fragment {
 
     }
 
+
     // 인터페이스 추가 정의
     public interface OnTitleSelectedListener_Week {
         public void onTitleSelected_week(int i,int j,int k);
@@ -100,6 +102,7 @@ public class WeekCalendarFragment extends Fragment {
 
         getCalendar();
         getWeekCalendar();
+        schedule();
 
         //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
         ArrayAdapter<String> adapt_grid
@@ -114,17 +117,25 @@ public class WeekCalendarFragment extends Fragment {
                 getActivity(),
                 android.R.layout.simple_list_item_1,
                 list3);
+
+//        adapt_grid_week = new ArrayAdapter<String>(
+//                getActivity(),
+//                android.R.layout.simple_list_item_1,
+ //               list4);
         Week_GridAdapter g =  new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list2);
 
         Week_GridAdapter g2;
+        //Week_GridAdapter g4;
 
         //가로모드일 때
         if(getActivity().getWindowManager().getDefaultDisplay().getRotation()
                 == Surface.ROTATION_90||getActivity().getWindowManager().getDefaultDisplay().getRotation()== Surface.ROTATION_270){
             //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
             g2 = new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list3,130);
+           // g4 = new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_2,list4,130);
         }else{  //세로모드일 때
             g2=new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list3,250);
+            //g4 = new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list4,130);
         }
 
         gridview.setAdapter(g);
@@ -140,6 +151,8 @@ public class WeekCalendarFragment extends Fragment {
                 view.setSelected(true);
 
                 Toast.makeText(getActivity(),"position="+position1,Toast.LENGTH_SHORT).show();
+                BusProvider.getInstance().post(position1);
+                Log.d("Otto",position1+"");
             }
         });
 
@@ -158,6 +171,14 @@ public class WeekCalendarFragment extends Fragment {
         for(int i=1;i<=168;i++){
             list3.add("");}
     }
+
+    private void schedule(){
+        for(int i=1;i<=168;i++){
+            list4.add("i");
+        }
+    }
+
+
 
     //달력 정보를 가져오는 함수,인텐트로 새로운 달력 정보를 가져올 경우
     private void getCalendar(){
