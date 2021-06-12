@@ -55,13 +55,17 @@ public class MonthViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle DATE = getArguments();
         BusProvider.getInstance().register(this);
 
 
-        if (DATE != null) {
-            day = DATE.getInt("day");
-        }
+       // Bundle DATE = getArguments();
+
+
+        //if (DATE != null) {
+        //    day = DATE.getInt("day");
+      //  }
 
     }
 
@@ -85,6 +89,7 @@ public class MonthViewFragment extends Fragment {
 
         if (getArguments() != null)
         {
+            System.out.println("aaa");
             day = getArguments().getInt("day"); // 프래그먼트1에서 받아온 값 넣기
 
         }
@@ -109,8 +114,13 @@ public class MonthViewFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("year",year);
                 intent.putExtra("month",month+1);
+
                 intent.putExtra("day", day+1);
+
+                intent.putExtra("day", 12);
+
               //  System.out.println(day);
+
                 startActivity(intent);
             }
         });
