@@ -20,6 +20,7 @@ import com.squareup.otto.Subscribe;
 
 import java.time.Year;
 import java.util.Calendar;
+import java.util.StringTokenizer;
 
 public class WeekViewFragment extends Fragment {
 
@@ -38,7 +39,8 @@ public class WeekViewFragment extends Fragment {
     private int year;
     private int month;
     private int week;
-    private int DATE;
+    private String day;
+    private String startTime;
 
     public WeekViewFragment() {
         // Required empty public constructor
@@ -116,7 +118,8 @@ public class WeekViewFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("year",year);
                 intent.putExtra("month",month+1);
-                intent.putExtra("day", DATE);
+                intent.putExtra("day", day);
+                intent.putExtra("startTime",startTime);
                 startActivity(intent);
             }
         });
@@ -126,9 +129,10 @@ public class WeekViewFragment extends Fragment {
     }
 
     @Subscribe
-    public void getPost(Integer position1) {
-        Log.d("First", position1 + "");
-        DATE = position1;
+    public void getPost(String s) {
+        StringTokenizer sample = new StringTokenizer(s);
+        day = sample.nextToken("/");
+        startTime = sample.nextToken("/");
     }
 
 

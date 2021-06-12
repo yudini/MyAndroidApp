@@ -43,6 +43,7 @@ public class WeekCalendarFragment extends Fragment {
     private int year;
     private int month;
     private int week;
+    String day;
     private int pos;
 
 
@@ -75,7 +76,6 @@ public class WeekCalendarFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("프래그먼트");
         if (getArguments() != null) {
             year = getArguments().getInt(ARG_PARAM1);
             month = getArguments().getInt(ARG_PARAM2);
@@ -107,20 +107,6 @@ public class WeekCalendarFragment extends Fragment {
 
         getCalendar();
         getWeekCalendar();
-
-        //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
-        ArrayAdapter<String> adapt_grid
-                = new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                list2);
-
-        //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
-        ArrayAdapter<String> adapt_grid_week
-                = new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                list3);
 
 
         Week_GridAdapter g =  new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list2);
@@ -185,9 +171,9 @@ public class WeekCalendarFragment extends Fragment {
                     });
                     dlg.show();
                 }
+                String Date=day + "/" + position1/7;
                 Toast.makeText(getActivity(),"position="+position1,Toast.LENGTH_SHORT).show();
-                BusProvider.getInstance().post(position1);
-                Log.d("Otto",position1+"");
+                BusProvider.getInstance().post(Date);
             }
         });
 
@@ -196,6 +182,7 @@ public class WeekCalendarFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
+                day=list2.get(position);
             }
         });
         return rootView;

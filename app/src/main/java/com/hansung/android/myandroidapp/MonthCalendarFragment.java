@@ -152,12 +152,8 @@ public class MonthCalendarFragment extends Fragment {
 
                 Activity activity = getActivity();
                 if(day>=1){
-                    Toast.makeText(getActivity(),today.get(Calendar.YEAR)+"."+((today.get(Calendar.MONTH))+1)+"."+day,Toast.LENGTH_SHORT).show();
                     BusProvider.getInstance().post(day);
-                    Log.d("Otto",day+"");
                 }
-                //날짜가 있을때만 토스트 메세지 띄우기
-                //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정
 
             }
 

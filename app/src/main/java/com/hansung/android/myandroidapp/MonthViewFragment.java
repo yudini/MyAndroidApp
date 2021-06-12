@@ -26,8 +26,6 @@ public class MonthViewFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     // TODO: Rename and change types of parameters
-    private int mParam1;
-    private int mParam2;
     public static int day;
     private int year;
     private int month;
@@ -95,7 +93,6 @@ public class MonthViewFragment extends Fragment {
                 intent.putExtra("year",year);
                 intent.putExtra("month",month+1);
                 intent.putExtra("day", DATE2);
-                //  System.out.println(day);
 
                 startActivity(intent);
             }
@@ -105,7 +102,6 @@ public class MonthViewFragment extends Fragment {
     }
     @Subscribe
     public void getPost(Integer day) {
-        Log.d("First", day + "");
         DATE2 = day;
     }
 }
