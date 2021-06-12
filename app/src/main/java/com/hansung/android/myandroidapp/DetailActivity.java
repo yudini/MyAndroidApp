@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.drawable.AnimationDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -44,77 +47,155 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private String today;
     private TimePicker startTimePicker;
     private TimePicker endTimePicker;
+    private TextView memo;
 
     private DBHelper mDbHelper;
     final int REQUEST_PERMISSIONS_FOR_LAST_KNOWN_LOCATION = 0;
     Location mLastLocation;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        Intent intent = getIntent();
-        int year = intent.getIntExtra("year",0);
-        int month =intent.getIntExtra("month",0);
-        int day = intent.getIntExtra("day", 0);
-        today = Integer.toString(year) + "/" +Integer.toString(month)+"/" + Integer.toString(year)+"/";
-
-        mDbHelper = new DBHelper(this);
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         title=findViewById(R.id.title);
         findButton = findViewById(R.id.search);
         address = findViewById(R.id.address);
         startTimePicker = findViewById(R.id.start);
         endTimePicker =findViewById(R.id.end);
+        memo =findViewById(R.id.memo);
         Button save = (Button)findViewById(R.id.save);
         Button cancel = (Button)findViewById(R.id.cancel);
         Button delete = (Button)findViewById(R.id.delete);
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                insertRecord();
-                finish();
-            }
-        });
+        Intent intent = getIntent();
+        int year = intent.getIntExtra("year",0);
+        int month =intent.getIntExtra("month",0);
+        int day = intent.getIntExtra("day", 0);
+        String s = intent.getStringExtra("title");
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        mDbHelper = new DBHelper(this);
 
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-            }
-        });
+        if(s!=null) {
+            Cursor cursor = mDbHelper.getUserByTitleOfSQL(s);
+            cursor.moveToFirst();
+            title.setText(cursor.getString(2));
+            int startHour = Integer.parseInt(cursor.getString(3));
+            int startMin = Integer.parseInt(cursor.getString(4));
+            int endHour = Integer.parseInt(cursor.getString(5));
+            int endMin = Integer.parseInt(cursor.getString(6));
+            address.setText(cursor.getString(7));
+            memo.setText(cursor.getString(8));
 
-        title.setText(year+"년"+month+"월"+day+"일");
+            startTimePicker.setHour(startHour);
+            startTimePicker.setMinute(startMin);
+            endTimePicker.setHour(endHour);
+            endTimePicker.setMinute(endMin);
 
-        getLastLocation();
+            save.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(DetailActivity.this);
+                    dlg.setTitle("확인");
+                    dlg.setMessage("정말 삭제하시겠습니까?");
+                    dlg.setPositiveButton("예",new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteRecord();
+                            finish();
+                        }
+                    });
+                    dlg.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(DetailActivity.this,"실행 취소", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    dlg.show();
+                }
+            });
+
+            getLastLocation();
+
+
+        }else{
+
+            save.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onClick(View v) {
+                    insertRecord();
+                    finish();
+                }
+            });
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            today = year + "/" +month+"/" + day;
+            title.setText(year+"년"+month+"월"+day+"일");
+
+            getLastLocation();
+        }
+
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void insertRecord(){
-        TextView memo = (TextView)findViewById(R.id.memo);
         Integer.toString(startTimePicker.getHour());
         String startHour = Integer.toString(startTimePicker.getHour());
         String startMin = Integer.toString(startTimePicker.getMinute());
         String endHour = Integer.toString(endTimePicker.getHour());
-        String endMin = Integer.toString(endTimePicker.getHour());
-        mDbHelper.insertUserBySQL(today,title.getText().toString(),startHour+":"+startMin,
-                endHour+":"+endMin, address.getText().toString(),memo.getText().toString());
+        String endMin = Integer.toString(endTimePicker.getMinute());
+        mDbHelper.insertUserBySQL(today,title.getText().toString(),startHour,
+               startMin,endHour,endMin,address.getText().toString(),memo.getText().toString());
     }
 
     private void deleteRecord(){
+        mDbHelper.deleteUserBySQL(title.getText().toString());
+    }
 
+
+    private void updateRecord() {
+
+       // mDbHelper.updateUserBySQL(_id.getText().toString(),name.getText().toString(),phone.getText().toString());
+//        long nOfRows = mDbHelper.updateUserByMethod(_id.getText().toString(),
+//                name.getText().toString(),
+//                phone.getText().toString());
+//        if (nOfRows >0)
+//            Toast.makeText(this,"Record Updated", Toast.LENGTH_SHORT).show();
+//        else
+//            Toast.makeText(this,"No Record Updated", Toast.LENGTH_SHORT).show();
     }
 
 

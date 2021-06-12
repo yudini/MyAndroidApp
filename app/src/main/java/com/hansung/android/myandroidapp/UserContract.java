@@ -16,8 +16,10 @@ public final class UserContract {
         public static final String TABLE_NAME="Users";
         public static final String KEY_DATE="date";
         public static final String KEY_TITLE="title";
-        public static final String KEY_STARTTIME="startTime";
-        public static final String KEY_ENDTIME="endTime";
+        public static final String KEY_STARTHOUR="startHour";
+        public static final String KEY_STARTMIN="startMin";
+        public static final String KEY_ENDHOUR="endHour";
+        public static final String KEY_ENDMIN="endMin";
         public static final String KEY_ADDRESS="address";
         public static final String KEY_MEMO="memo";
 
@@ -25,8 +27,10 @@ public final class UserContract {
                 _ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
                 KEY_DATE + TEXT_TYPE + COMMA_SEP +
                 KEY_TITLE + TEXT_TYPE + COMMA_SEP +
-                KEY_STARTTIME + TEXT_TYPE + COMMA_SEP +
-                KEY_ENDTIME + TEXT_TYPE + COMMA_SEP +
+                KEY_STARTHOUR + TEXT_TYPE + COMMA_SEP +
+                KEY_STARTMIN + TEXT_TYPE + COMMA_SEP +
+                KEY_ENDHOUR + TEXT_TYPE + COMMA_SEP +
+                KEY_ENDMIN + TEXT_TYPE + COMMA_SEP +
                 KEY_ADDRESS + TEXT_TYPE + COMMA_SEP +
                 KEY_MEMO + TEXT_TYPE + " )";
 

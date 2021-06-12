@@ -1,7 +1,11 @@
 package com.hansung.android.myandroidapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -21,10 +25,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MonthCalendarFragment extends Fragment {
 
@@ -37,6 +44,7 @@ public class MonthCalendarFragment extends Fragment {
     public static int day;
     Calendar today;
     ArrayList<String> list = new ArrayList<>();
+    private DBHelper dbHelper;
 
     public MonthCalendarFragment() {
         // Required empty public constructor
@@ -68,6 +76,8 @@ public class MonthCalendarFragment extends Fragment {
             year= getArguments().getInt(ARG_PARAM1);
             month = getArguments().getInt(ARG_PARAM2);
         }
+        dbHelper= new DBHelper(getActivity());
+
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,21 +112,48 @@ public class MonthCalendarFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                AlertDialog.Builder dlg = new AlertDialog.Builder(getContext());
                 view.setSelected(true);
                 day=position-today.get(Calendar.DAY_OF_WEEK)+2;      //현재 일 구하기
                 // 현재 프래그먼트와 연결된 액티비티를 반환
+                Cursor cursor = dbHelper.getUserByDateOfSQL(year,(month+1),day);
+                ArrayList<String> dlgList = new ArrayList<>();
 
+                ListView dlgView = (ListView)inflater.inflate(R.layout.dialog, null).findViewById(R.id.dialogView);
 
+                while(cursor.moveToNext()){
+                    String s=cursor.getString(2);
+                    dlgList.add(s);
+                }
+                ArrayAdapter<String> adp = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, dlgList);
+
+                if(cursor.moveToFirst()){
+                    dlgView.setAdapter(adp);
+                    dlgView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String title = dlgList.get(position);
+                            Intent intent = new Intent(getActivity(), DetailActivity.class);
+                            intent.putExtra("title",title);
+                            startActivity(intent);
+                        }
+                    });
+                    dlg.setTitle(year +  "." + (month+1) + "." + day);
+                    ((ViewGroup)dlgView.getParent()).removeView(dlgView);
+                    dlg.setView(dlgView);
+                    dlg.setPositiveButton("확인",new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int which) {
+                            //토스트 메시지
+                        }
+                    });
+                    dlg.show();
+                }
 
 
                 Activity activity = getActivity();
-                if(day>=1){
-                    Toast.makeText(getActivity(),today.get(Calendar.YEAR)+"."+((today.get(Calendar.MONTH))+1)+"."+day,Toast.LENGTH_SHORT).show();
-                    MonthViewFragment m = new MonthViewFragment();
-                    Bundle DATE = new Bundle();
-                    DATE.putInt("day",day);
-                    m.setArguments(DATE);
-                }
+                //if(day>=1){
+                 //   //Toast.makeText(getActivity(),today.get(Calendar.YEAR)+"."+((today.get(Calendar.MONTH))+1)+"."+day,Toast.LENGTH_SHORT).show();
+                //}
                 //날짜가 있을때만 토스트 메세지 띄우기
                 //캘린더 클래스의 월은 0~11, +1을 해주어서 1~12로 설정
 
@@ -124,9 +161,6 @@ public class MonthCalendarFragment extends Fragment {
 
 
         });
-
-        int test = getArguments().getInt("day");
-        System.out.println(test);
 
         return rootView;
 
