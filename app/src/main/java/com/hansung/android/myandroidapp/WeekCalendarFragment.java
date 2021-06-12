@@ -151,7 +151,7 @@ public class WeekCalendarFragment extends Fragment {
                 view.setSelected(true);
 
                 Toast.makeText(getActivity(),"position="+position1,Toast.LENGTH_SHORT).show();
-                BusProvider.getInstance().post(position1);
+               // BusProvider.getInstance().post(position1);
                 Log.d("Otto",position1+"");
             }
         });

@@ -27,7 +27,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(UserContract.Users.DELETE_TABLE);
         onCreate(db);
     }
-
     public void insertUserBySQL(String date, String title,String startHour,String startMin,String endHour,String endMin,String address,String memo) {
         try {
             String sql = String.format (
@@ -50,12 +49,12 @@ public class DBHelper extends SQLiteOpenHelper {
                     endMin,
                     address,
                     memo);
-
             getWritableDatabase().execSQL(sql);
         } catch (SQLException e) {
             Log.e(TAG,"Error in inserting recodes");
         }
     }
+
 
     public Cursor getUserByDateOfSQL(int year,int month,int day) {
         String date= year + "/" +month+"/" + day;

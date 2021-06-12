@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.otto.Subscribe;
+//import com.squareup.otto.Subscribe;
 
 import java.time.Year;
 import java.util.Calendar;
@@ -58,7 +58,7 @@ public class WeekViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BusProvider.getInstance().register(this);
+       // BusProvider.getInstance().register(this);
 
         if (getArguments() != null) {
             mParam1 = getArguments().getInt(ARG_PARAM1);
@@ -71,7 +71,7 @@ public class WeekViewFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        BusProvider.getInstance().unregister(this);
+       // BusProvider.getInstance().unregister(this);
     }
 
 
@@ -124,7 +124,6 @@ public class WeekViewFragment extends Fragment {
         return rootView;
     }
 
-    @Subscribe
     public void getPost(Integer position1) {
         Log.d("First", position1 + "");
         DATE = position1;
