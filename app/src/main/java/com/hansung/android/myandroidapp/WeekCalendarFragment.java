@@ -1,8 +1,11 @@
 package com.hansung.android.myandroidapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -48,7 +51,8 @@ public class WeekCalendarFragment extends Fragment {
     ArrayList<String> list1 = new ArrayList<>();
     ArrayList<String> list2 = new ArrayList<>();
     ArrayList<String> list3 = new ArrayList<>();  //주간 24*7표 공백 저장
-    ArrayList<String> list4 = new ArrayList<>();
+    private DBHelper dbHelper;
+
 
     Intent getIn;
 
@@ -78,6 +82,7 @@ public class WeekCalendarFragment extends Fragment {
             week = getArguments().getInt(ARG_PARAM3);
 
         }
+        dbHelper= new DBHelper(getActivity());
 
     }
 
@@ -102,7 +107,6 @@ public class WeekCalendarFragment extends Fragment {
 
         getCalendar();
         getWeekCalendar();
-        schedule();
 
         //어댑터 준비 (배열 객체 이용, simple_list_item_1 리소스 사용
         ArrayAdapter<String> adapt_grid
@@ -118,14 +122,11 @@ public class WeekCalendarFragment extends Fragment {
                 android.R.layout.simple_list_item_1,
                 list3);
 
-//        adapt_grid_week = new ArrayAdapter<String>(
-//                getActivity(),
-//                android.R.layout.simple_list_item_1,
- //               list4);
+
         Week_GridAdapter g =  new Week_GridAdapter(getActivity(),android.R.layout.simple_list_item_1,list2);
 
         Week_GridAdapter g2;
-        //Week_GridAdapter g4;
+
 
         //가로모드일 때
         if(getActivity().getWindowManager().getDefaultDisplay().getRotation()
@@ -148,8 +149,42 @@ public class WeekCalendarFragment extends Fragment {
         gridview_week.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position1, long id) {
+
+                AlertDialog.Builder dlg = new AlertDialog.Builder(getContext());
                 view.setSelected(true);
 
+                Cursor cursor = dbHelper.getUserByDateOfSQL(year,(month+1),position1);
+                ArrayList<String> dlgList = new ArrayList<>();
+
+                ListView dlgView = (ListView)inflater.inflate(R.layout.dialog, null).findViewById(R.id.dialogView);
+
+                while(cursor.moveToNext()){
+                    String s=cursor.getString(2);
+                    dlgList.add(s);
+                }
+                ArrayAdapter<String> adp = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, dlgList);
+
+                if(cursor.moveToFirst()){
+                    dlgView.setAdapter(adp);
+                    dlgView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String title = dlgList.get(position);
+                            Intent intent = new Intent(getActivity(), DetailActivity.class);
+                            intent.putExtra("title",title);
+                            startActivity(intent);
+                        }
+                    });
+                    dlg.setTitle(year +  "." + (month+1) + "." + position1);
+                    ((ViewGroup)dlgView.getParent()).removeView(dlgView);
+                    dlg.setView(dlgView);
+                    dlg.setPositiveButton("확인",new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int which) {
+                            //토스트 메시지
+                        }
+                    });
+                    dlg.show();
+                }
                 Toast.makeText(getActivity(),"position="+position1,Toast.LENGTH_SHORT).show();
                 BusProvider.getInstance().post(position1);
                 Log.d("Otto",position1+"");
@@ -172,11 +207,6 @@ public class WeekCalendarFragment extends Fragment {
             list3.add("");}
     }
 
-    private void schedule(){
-        for(int i=1;i<=168;i++){
-            list4.add("i");
-        }
-    }
 
 
 
