@@ -141,7 +141,7 @@ public class WeekCalendarFragment extends Fragment {
                 AlertDialog.Builder dlg = new AlertDialog.Builder(getContext());
                 view.setSelected(true);
 
-                Cursor cursor = dbHelper.getUserByDateOfSQL(year,(month+1),position1);
+                Cursor cursor = dbHelper.week_getUserByDateOfSQL(year,(month+1),Integer.parseInt(day),position1/7);
                 ArrayList<String> dlgList = new ArrayList<>();
 
                 ListView dlgView = (ListView)inflater.inflate(R.layout.dialog, null).findViewById(R.id.dialogView);
@@ -163,7 +163,7 @@ public class WeekCalendarFragment extends Fragment {
                             startActivity(intent);
                         }
                     });
-                    dlg.setTitle(year +  "." + (month+1) + "." + position1);
+                    dlg.setTitle(year +  "." + (month+1) + "." + day);
                     ((ViewGroup)dlgView.getParent()).removeView(dlgView);
                     dlg.setView(dlgView);
                     dlg.setPositiveButton("확인",new DialogInterface.OnClickListener(){

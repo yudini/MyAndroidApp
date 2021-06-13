@@ -68,6 +68,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public Cursor week_getUserByDateOfSQL(int year,int month,int day,int startTime) {
+        String date= year + "/" +month+"/" + day;
+        String sql= String.format(
+                "SELECT * FROM %s WHERE %s = '%s' AND %s ='%s'",
+                UserContract.Users.TABLE_NAME,
+                UserContract.Users.KEY_DATE,
+                date,
+                UserContract.Users.KEY_STARTHOUR,
+                startTime);
+        return getReadableDatabase().rawQuery(sql,null);
+    }
+
+
     public Cursor getUserByTitleOfSQL(String title) {
         String sql= String.format(
                 "SELECT * FROM %s WHERE %s = '%s'",
@@ -75,7 +88,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 UserContract.Users.KEY_TITLE,
                 title);
         return getReadableDatabase().rawQuery(sql,null);
-
 
     }
 
@@ -119,7 +131,5 @@ public class DBHelper extends SQLiteOpenHelper {
             Log.e(TAG,"Error in updating recodes");
         }
     }
-
-
-
+    
 }
