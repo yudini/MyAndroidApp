@@ -94,6 +94,7 @@ public class MonthViewFragment extends Fragment {
                 intent.putExtra("month",month+1);
                 intent.putExtra("day", DATE2);
 
+
                 startActivity(intent);
             }
         });

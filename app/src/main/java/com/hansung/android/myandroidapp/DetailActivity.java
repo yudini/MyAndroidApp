@@ -72,7 +72,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         Intent intent = getIntent();
         int year = intent.getIntExtra("year",0);
         int month =intent.getIntExtra("month",0);
-        int day = intent.getIntExtra("day", 0);
+        int day = intent.getIntExtra("day",0);
+        int select_startHour = intent.getIntExtra("startTime", 0);
         String s = intent.getStringExtra("title");
 
         mDbHelper = new DBHelper(this);
@@ -162,6 +163,11 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
             today = year + "/" +month+"/" + day;
             title.setText(year+"년"+month+"월"+day+"일");
+
+            startTimePicker.setHour(select_startHour);
+            startTimePicker.setMinute(0);
+            endTimePicker.setHour(select_startHour+1);
+            endTimePicker.setMinute(0);
 
             getLastLocation();
         }

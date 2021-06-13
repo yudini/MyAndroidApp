@@ -118,8 +118,8 @@ public class WeekViewFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("year",year);
                 intent.putExtra("month",month+1);
-                intent.putExtra("day", day);
-                intent.putExtra("startTime",startTime);
+                intent.putExtra("day", Integer.parseInt(day));
+                intent.putExtra("startTime",Integer.parseInt(startTime));
                 startActivity(intent);
             }
         });

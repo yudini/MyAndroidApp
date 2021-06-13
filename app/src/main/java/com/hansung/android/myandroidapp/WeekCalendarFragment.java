@@ -43,6 +43,8 @@ public class WeekCalendarFragment extends Fragment {
     private int year;
     private int month;
     private int week;
+    private int date2;
+    private int time2;
     String day;
     private int pos;
 
